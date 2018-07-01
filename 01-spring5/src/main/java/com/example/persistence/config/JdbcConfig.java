@@ -20,25 +20,27 @@ import javax.sql.DataSource;
 @ComponentScan(basePackages = "com.example.persistence.repository.impl")
 // TODO 1-09 CrudRepositoryを継承したインタフェースのパッケージ名を指定する
 
+@Configuration
+@EnableJdbcRepositories(basePackages="com.example.persistence.repository")
 public class JdbcConfig {
 
     // 引数でDataSourceのBeanを受け取る
     // TODO 1-10 Beanであることを示すアノテーションを付加する
-
+    @Bean
     public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) {
         // コンストラクタでDataSourceを受け取る
         return new NamedParameterJdbcTemplate(dataSource);
     }
 
     // TODO 1-11 Beanであることを示すアノテーションを付加する
-
+    @Bean
     public DataAccessStrategy dataAccessStrategy(JdbcMappingContext context) {
         // NamedParameterJdbcTemplateを利用したDataAccessStrategy
         return new DefaultDataAccessStrategy(new SqlGeneratorSource(context), context);
     }
 
     // TODO 1-12 Beanであることを示すアノテーションを付加する
-
+    @Bean
     public NamingStrategy namingStrategy() {
         // フィールド名のキャメルケースを列名のスネークケースに変換するNamingStrategy
         return new DelimiterNamingStrategy();

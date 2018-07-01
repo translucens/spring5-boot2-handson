@@ -17,7 +17,7 @@ import java.util.Optional;
  * Spring Data JDBCを使わず、NamedParameterJdbcTemplateを直接利用しています。
  */
 // TODO 4-10 リポジトリクラスであることを示すアノテーションを付加する
-
+@Repository
 public class AccountRepositoryImpl implements AccountRepository {
 
     private final NamedParameterJdbcTemplate jdbcTemplate;

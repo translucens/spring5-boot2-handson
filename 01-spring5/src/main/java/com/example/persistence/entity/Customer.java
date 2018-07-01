@@ -11,6 +11,7 @@ public class Customer {
 
     // TODO 1-06 主キーであることを示すアノテーションを付加する
 
+    @Id
     private Integer id;
 
     private String firstName;

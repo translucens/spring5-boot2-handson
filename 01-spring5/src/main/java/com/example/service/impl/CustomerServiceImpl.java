@@ -9,25 +9,31 @@ import org.springframework.transaction.annotation.Transactional;
 
 // TODO 2-02 ビジネスロジッククラスのBeanであることを示すアノテーションを付加する
 
+@Service
 public class CustomerServiceImpl implements CustomerService {
 
     // TODO 2-03 CustomerRepositoryをコンストラクタインジェクションする
+    private final CustomerRepository customerRepository;
 
-
+    public CustomerServiceImpl(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
 
     // TODO 2-04 トランザクション管理アノテーションを付加する（伝播属性＝REQUIRED, 読み取り専用＝true）
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public Iterable<Customer> findAll() {
         // TODO 2-05 CustomerRepositoryのfindAll()を呼び出す
-        return null;
+        return customerRepository.findAll();
     }
 
     // TODO 2-06 トランザクション管理アノテーションを付加する（伝播属性＝REQUIRED, 読み取り専用＝false）
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     public void save(Customer customer) {
         // TODO 2-07 CustomerRepositoryのsave(Customer)を呼び出す
-
+        customerRepository.save(customer);
     }
 }

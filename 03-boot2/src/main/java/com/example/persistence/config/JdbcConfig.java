@@ -16,12 +16,10 @@ import javax.sql.DataSource;
 
 @Configuration
 // TODO 5-04 @ComponentScanアノテーションのみ削除する
-@ComponentScan(basePackages = "com.example.persistence.repository.impl")
 @EnableJdbcRepositories(basePackages = "com.example.persistence.repository")
 public class JdbcConfig {
 
     // TODO 5-05 NamedParameterJdbcTemplateのBeanのみ削除する
-    @Bean
     public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) {
         // コンストラクタでDataSourceを受け取る
         return new NamedParameterJdbcTemplate(dataSource);

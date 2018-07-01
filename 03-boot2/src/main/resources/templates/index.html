@@ -23,6 +23,8 @@
         <th>名</th>
         <th>メールアドレス</th>
         <th>誕生日</th>
+        <th sec:authorize="hasRole('ADMIN')">編集</th>
+        <th sec:authorize="hasRole('ADMIN')">削除</th>
     </tr>
 
     <tr th:each="customer : ${customers}" th:object="${customer}">
@@ -31,6 +33,16 @@
         <td th:text="*{firstName}">Taro</td>
         <td th:text="*{email}">tsuzuki@example.com</td>
         <td th:text="*{#temporals.format(birthday, 'yyyy-MM-dd')}">2000-01-01</td>
+        <td sec:authorize="hasRole('ADMIN')">
+            <a href="edit.html" th:href="@{/edit/{id}(id=*{id})}">
+                <span th:text="*{id}">1</span>を編集
+            </a>
+        </td>
+        <td sec:authorize="hasRole('ADMIN')">
+            <form method="post" action="index.html" th:action="@{/remove/{id}(id=*{id})}">
+                <input type="submit" value="1を削除" th:value="|*{id}を削除|">
+            </form>
+        </td>
     </tr>
     <!--/*-->
     <tr>

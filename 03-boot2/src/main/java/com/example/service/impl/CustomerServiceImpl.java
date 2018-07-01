@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
@@ -22,9 +24,21 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.findAll();
     }
 
+    @Transactional(propagation =Propagation.REQUIRED, readOnly = true)
+    @Override
+    public Optional<Customer> findById(int id) {
+        return customerRepository.findById(id);
+    }
+
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     @Override
     public void save(Customer customer) {
         customerRepository.save(customer);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
+    @Override
+    public void removeById(int id) {
+        customerRepository.deleteById(Integer.valueOf(id));
     }
 }

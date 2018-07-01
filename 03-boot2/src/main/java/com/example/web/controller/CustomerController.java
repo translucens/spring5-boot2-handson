@@ -10,7 +10,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.Optional;
 
 @Controller
 public class CustomerController {
@@ -44,6 +47,42 @@ public class CustomerController {
         return "insertMain";
     }
 
+    @GetMapping("/edit/{userId}")
+    public String edit(@PathVariable("userId") int userId, Model model){
+
+        Optional<Customer> customer = customerService.findById(userId);
+        if (!customer.isPresent()) {
+            return "redirect:/";
+        }
+
+        model.addAttribute("customerForm", customer.get());
+        return "edit";
+    }
+
+    @PostMapping("/edit/{userId}")
+    public String editComplete(
+            @PathVariable("userId") int userId,
+            @Validated CustomerForm customerForm,
+            BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return "edit";
+        }
+
+        Optional<Customer> customer = customerService.findById(userId);
+        customer.ifPresent(c -> {
+            Customer req = customerForm.convertToEntity();
+            c.setBirthday(req.getBirthday());
+            c.setEmail(req.getEmail());
+            c.setFirstName(req.getFirstName());
+            c.setLastName(req.getLastName());
+            customerService.save(c);
+        });
+
+        return "redirect:/";
+    }
+
+
     /**
      * 社員の追加を行うコントローラーメソッド。
      */
@@ -57,6 +96,12 @@ public class CustomerController {
         // フォームをエンティティに変換
         Customer customer = customerForm.convertToEntity();
         customerService.save(customer);
+        return "redirect:/";
+    }
+
+    @PostMapping("/remove/{userId}")
+    public String remove(@PathVariable("userId") int userId){
+        customerService.removeById(userId);
         return "redirect:/";
     }
 }

@@ -40,7 +40,7 @@ public class MvcInitializerTest {
     @Test
     @DisplayName("[Spring Security無し] getServletConfigClasses()がJava Configの配列を返す")
     // 演習3の時点ではこちらを有効化（演習4ではこちらを無効化）
-//    @Disabled("Spring Security有りでテストするため無効化")
+    @Disabled("Spring Security有りでテストするため無効化")
     public void getServletConfigClassesTest() {
         Class[] expectedClasses = {DataSourceConfig.class, JdbcConfig.class, ServiceConfig.class, MvcConfig.class};
         Class<?>[] configClasses = mvcInitializer.getServletConfigClasses();
@@ -50,7 +50,7 @@ public class MvcInitializerTest {
     @Test
     @DisplayName("[Spring Security有り] getServletConfigClasses()がJava Configの配列を返す")
     // 演習3の時点ではこちらを無効化（演習4ではこちらを有効化）
-    @Disabled("Spring Security無しでテストするため無効化")
+    //@Disabled("Spring Security無しでテストするため無効化")
     public void getServletConfigClassesTest_withSpringSecurity() {
         Class[] expectedClasses = {DataSourceConfig.class, JdbcConfig.class, ServiceConfig.class, MvcConfig.class, SecurityConfig.class};
         Class<?>[] configClasses = mvcInitializer.getServletConfigClasses();

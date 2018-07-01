@@ -10,29 +10,41 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 // TODO 4-02 Spring Securityを有効化するアノテーションを付加する
-
+@EnableWebSecurity
 // TODO 4-03 com.example.security.detailsパッケージをコンポーネントスキャンする
-
+@ComponentScan(basePackages = "com.example.security.details")
 // TODO 4-04 WebSecurityConfigurerAdapterを継承する
-public class SecurityConfig    {
+public class SecurityConfig  extends WebSecurityConfigurerAdapter  {
 
     // TODO 4-05 configure(WebSecurity)をオーバーライドして、「/css/**」をセキュリティの除外対象にする
 
-
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().mvcMatchers("/css/**");
+    }
 
 
     // TODO 4-06 configure(HttpSecurity)をオーバーライドして、認証認可設定を記述する
 
-
-
-
-
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.formLogin()
+                .loginPage("/login")
+                .permitAll();
+        http.authorizeRequests()
+                .mvcMatchers("/insert*").hasRole("ADMIN")
+                .anyRequest().authenticated();
+        http.logout()
+                .invalidateHttpSession(true)
+                .permitAll();
+    }
 
 
     // TODO 4-07 Beanであることを示すアノテーションを付加する
 
+    @Bean
     public PasswordEncoder passwordEncoder() {
         // TODO 4-08 BCryptPasswordEncoderをnewしてreturnする
-        return null;
+        return new BCryptPasswordEncoder();
     }
 }

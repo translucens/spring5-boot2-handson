@@ -8,10 +8,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 
 @EnableWebSecurity
 // TODO 5-11 @ComponentScanアノテーションのみ削除する
-@ComponentScan(basePackages = "com.example.security.details")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
@@ -24,7 +24,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.formLogin()
                 .loginPage("/login")
                 .permitAll();
+        http.httpBasic();
         http.authorizeRequests()
+                .requestMatchers(EndpointRequest.toAnyEndpoint()).hasRole("ACTUATOR")
+                .mvcMatchers("/edit/*").hasRole("ADMIN")
+                .mvcMatchers("/remove/*").hasRole("ADMIN")
                 .mvcMatchers("/insert*").hasRole("ADMIN")
                 .anyRequest().authenticated();
         http.logout()
